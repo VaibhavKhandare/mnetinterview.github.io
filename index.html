@@ -70,41 +70,31 @@
             color: #a3a3a3;
             cursor: not-allowed;
         }
-        .slider-container {
+        .rating-buttons {
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
-        input[type="range"] {
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: #404040;
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #fafafa;
-            cursor: pointer;
-            border: 2px solid #0a0a0a;
-        }
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #fafafa;
-            cursor: pointer;
-            border: 2px solid #0a0a0a;
-        }
-        .slider-value {
-            min-width: 50px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 16px;
+        .rating-btn {
+            padding: 6px 12px;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            background: #0a0a0a;
             color: #fafafa;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            min-width: 44px;
+        }
+        .rating-btn:hover {
+            background: #262626;
+            border-color: #525252;
+        }
+        .rating-btn.active {
+            background: #fafafa;
+            color: #0a0a0a;
+            border-color: #fafafa;
         }
         textarea {
             min-height: 80px;
@@ -281,34 +271,26 @@
             <div class="ratings-row">
                 <div class="form-group">
                     <label for="algo">Algo:</label>
-                    <div class="slider-container">
-                        <input type="range" id="algo" name="algo" min="0" max="5" step="0.5" value="0" required>
-                        <span class="slider-value" id="algoValue">0</span>
-                    </div>
+                    <div class="rating-buttons" id="algoButtons"></div>
+                    <input type="hidden" id="algo" name="algo" value="0" required>
                 </div>
 
                 <div class="form-group">
                     <label for="code">Code:</label>
-                    <div class="slider-container">
-                        <input type="range" id="code" name="code" min="0" max="5" step="0.5" value="0" required>
-                        <span class="slider-value" id="codeValue">0</span>
-                    </div>
+                    <div class="rating-buttons" id="codeButtons"></div>
+                    <input type="hidden" id="code" name="code" value="0" required>
                 </div>
 
                 <div class="form-group">
                     <label for="communication">Communication:</label>
-                    <div class="slider-container">
-                        <input type="range" id="communication" name="communication" min="0" max="3" step="0.5" value="0" required>
-                        <span class="slider-value" id="communicationValue">0</span>
-                    </div>
+                    <div class="rating-buttons" id="communicationButtons"></div>
+                    <input type="hidden" id="communication" name="communication" value="0" required>
                 </div>
 
                 <div class="form-group">
                     <label for="total">Total:</label>
-                    <div class="slider-container">
-                        <input type="range" id="total" name="total" min="0" max="5" step="0.5" value="0" required>
-                        <span class="slider-value" id="totalValue">0</span>
-                    </div>
+                    <div class="rating-buttons" id="totalButtons"></div>
+                    <input type="hidden" id="total" name="total" value="0" required>
                 </div>
             </div>
 
@@ -523,14 +505,22 @@
             document.getElementById('interviewerName').value = formData.interviewerName || '';
             document.getElementById('date').value = formData.date || formatDate(new Date());
             document.getElementById('verdict').value = formData.verdict || '';
-            document.getElementById('algo').value = formData.algo || '0';
-            document.getElementById('code').value = formData.code || '0';
-            document.getElementById('communication').value = formData.communication || '0';
-            document.getElementById('total').value = formData.total || '0';
+            const algo = formData.algo || '0';
+            const code = formData.code || '0';
+            const communication = formData.communication || '0';
+            const total = formData.total || '0';
+            
+            document.getElementById('algo').value = algo;
+            document.getElementById('code').value = code;
+            document.getElementById('communication').value = communication;
+            document.getElementById('total').value = total;
             document.getElementById('note').value = formData.note || '';
             document.getElementById('timelineNotes').value = formData.timelineNotes || '';
             
-            updateSliderValues();
+            updateRatingButtons('algoButtons', 'algo', algo);
+            updateRatingButtons('codeButtons', 'code', code);
+            updateRatingButtons('communicationButtons', 'communication', communication);
+            updateRatingButtons('totalButtons', 'total', total);
             
             const timelineContainer = document.getElementById('timelineEntries');
             timelineContainer.innerHTML = '';
@@ -549,11 +539,44 @@
             }
         }
 
-        function updateSliderValues() {
-            document.getElementById('algoValue').textContent = document.getElementById('algo').value;
-            document.getElementById('codeValue').textContent = document.getElementById('code').value;
-            document.getElementById('communicationValue').textContent = document.getElementById('communication').value;
-            document.getElementById('totalValue').textContent = document.getElementById('total').value;
+        function createRatingButtons(containerId, inputId, max) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const values = [];
+            for (let i = 0; i <= max * 2; i++) {
+                values.push(i / 2);
+            }
+            values.forEach(value => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'rating-btn';
+                btn.textContent = value;
+                btn.onclick = () => {
+                    document.getElementById(inputId).value = value;
+                    updateRatingButtons(containerId, inputId, value);
+                    debouncedSave();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateRatingButtons(containerId, inputId, value) {
+            const container = document.getElementById(containerId);
+            const buttons = container.querySelectorAll('.rating-btn');
+            buttons.forEach(btn => {
+                if (parseFloat(btn.textContent) === parseFloat(value)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function initRatingButtons() {
+            createRatingButtons('algoButtons', 'algo', 5);
+            createRatingButtons('codeButtons', 'code', 5);
+            createRatingButtons('communicationButtons', 'communication', 3);
+            createRatingButtons('totalButtons', 'total', 5);
         }
 
         function generateText() {
@@ -624,7 +647,10 @@ ${timelineEntries.join('\n')}${timelineNotes ? '\n\n' + timelineNotes : ''}`;
                 document.getElementById('timelineNotes').value = '';
                 sessionStorage.removeItem('interviewFormData');
                 document.getElementById('output').style.display = 'none';
-                updateSliderValues();
+                updateRatingButtons('algoButtons', 'algo', '0');
+                updateRatingButtons('codeButtons', 'code', '0');
+                updateRatingButtons('communicationButtons', 'communication', '0');
+                updateRatingButtons('totalButtons', 'total', '0');
                 renderFlowButtons();
             }
         }
@@ -643,23 +669,6 @@ ${timelineEntries.join('\n')}${timelineNotes ? '\n\n' + timelineNotes : ''}`;
             timelineObserver.observe(timelineContainer, { childList: true, subtree: true });
         }
 
-        document.getElementById('algo').addEventListener('input', (e) => {
-            document.getElementById('algoValue').textContent = e.target.value;
-            debouncedSave();
-        });
-        document.getElementById('code').addEventListener('input', (e) => {
-            document.getElementById('codeValue').textContent = e.target.value;
-            debouncedSave();
-        });
-        document.getElementById('communication').addEventListener('input', (e) => {
-            document.getElementById('communicationValue').textContent = e.target.value;
-            debouncedSave();
-        });
-        document.getElementById('total').addEventListener('input', (e) => {
-            document.getElementById('totalValue').textContent = e.target.value;
-            debouncedSave();
-        });
-
         document.getElementById('candidateName').addEventListener('input', debouncedSave);
         document.getElementById('interviewerName').addEventListener('input', () => {
             saveInterviewerName();
@@ -674,6 +683,7 @@ ${timelineEntries.join('\n')}${timelineNotes ? '\n\n' + timelineNotes : ''}`;
         document.getElementById('clearBtn').addEventListener('click', clearAll);
 
         setCurrentDate();
+        initRatingButtons();
         loadInterviewerName();
         loadFromSessionStorage();
         renderFlowButtons();
