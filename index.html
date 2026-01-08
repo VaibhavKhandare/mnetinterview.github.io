@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Feedback Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e5e5e5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #171717;
+            padding: 32px;
+            border-radius: 8px;
+            border: 1px solid #262626;
+        }
+        h1 {
+            color: #fafafa;
+            margin-bottom: 24px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4d4d4;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #0a0a0a;
+            color: #fafafa;
+            transition: all 0.2s;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #525252;
+            box-shadow: 0 0 0 2px rgba(82, 82, 82, 0.1);
+        }
+        input[readonly] {
+            background: #171717;
+            color: #a3a3a3;
+            cursor: not-allowed;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #404040;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fafafa;
+            cursor: pointer;
+            border: 2px solid #0a0a0a;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fafafa;
+            cursor: pointer;
+            border: 2px solid #0a0a0a;
+        }
+        .slider-value {
+            min-width: 50px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #fafafa;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .ratings-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .timeline-section {
+            margin-top: 25px;
+        }
+        .timeline-entries {
+            margin-top: 10px;
+        }
+        .timeline-entry {
+            margin-bottom: 15px;
+        }
+        .timeline-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+        .timeline-time {
+            min-width: 80px;
+            padding: 8px;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #0a0a0a;
+            color: #a3a3a3;
+        }
+        .timeline-text {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .timeline-flow {
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #262626;
+        }
+        .flow-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .flow-btn {
+            padding: 10px 16px;
+            background: #fafafa;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .flow-btn:hover {
+            background: #e5e5e5;
+        }
+        .flow-btn-secondary {
+            background: #22c55e;
+            color: #0a0a0a;
+        }
+        .flow-btn-secondary:hover {
+            background: #16a34a;
+        }
+        .flow-separator {
+            color: #525252;
+            font-size: 18px;
+            margin: 0 5px;
+        }
+        .flow-label {
+            font-size: 12px;
+            color: #a3a3a3;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #fafafa;
+            color: #0a0a0a;
+        }
+        .btn-primary:hover {
+            background: #e5e5e5;
+        }
+        .btn-secondary {
+            background: #404040;
+            color: #fafafa;
+        }
+        .btn-secondary:hover {
+            background: #525252;
+        }
+        .btn-danger {
+            background: #dc2626;
+            color: #fafafa;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .remove-btn {
+            background: #dc2626;
+            color: #fafafa;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .remove-btn:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interview Feedback Form</h1>
+
+        <form id="interviewForm">
+            <div class="form-group">
+                <label for="candidateName">Candidate Name:</label>
+                <input type="text" id="candidateName" name="candidateName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="interviewerName">Interviewer Name:</label>
+                <input type="text" id="interviewerName" name="interviewerName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="text" id="date" name="date" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="verdict">Verdict:</label>
+                <select id="verdict" name="verdict" required>
+                    <option value="">Select verdict</option>
+                    <option value="Hard Reject">Hard Reject</option>
+                    <option value="Soft Reject">Soft Reject</option>
+                    <option value="Marginal Pass">Marginal Pass</option>
+                    <option value="Pass">Pass</option>
+                    <option value="Strong Hire">Strong Hire</option>
+                    <option value="Exceptional">Exceptional</option>
+                </select>
+            </div>
+
+            <div class="ratings-row">
+                <div class="form-group">
+                    <label for="algo">Algo:</label>
+                    <div class="slider-container">
+                        <input type="range" id="algo" name="algo" min="0" max="5" step="0.5" value="0" required>
+                        <span class="slider-value" id="algoValue">0</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <div class="slider-container">
+                        <input type="range" id="code" name="code" min="0" max="5" step="0.5" value="0" required>
+                        <span class="slider-value" id="codeValue">0</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="communication">Communication:</label>
+                    <div class="slider-container">
+                        <input type="range" id="communication" name="communication" min="0" max="3" step="0.5" value="0" required>
+                        <span class="slider-value" id="communicationValue">0</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="total">Total:</label>
+                    <div class="slider-container">
+                        <input type="range" id="total" name="total" min="0" max="5" step="0.5" value="0" required>
+                        <span class="slider-value" id="totalValue">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="note">Note:</label>
+                <textarea id="note" name="note"></textarea>
+            </div>
+
+            <div class="timeline-section">
+                <label>Timeline</label>
+                <div class="timeline-flow">
+                    <div class="flow-label">Next Steps:</div>
+                    <div class="flow-buttons" id="flowButtons"></div>
+                </div>
+                <div class="timeline-entries" id="timelineEntries"></div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="timelineNotes">Candidate Code:</label>
+                    <textarea id="timelineNotes" name="timelineNotes" placeholder="Add candidate code here..."></textarea>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="generateBtn">Generate Text</button>
+                <button type="button" class="btn btn-danger" id="clearBtn">Clear All</button>
+            </div>
+        </form>
+
+        <div id="output" style="margin-top: 30px; display: none;">
+            <h3 style="color: #fafafa; margin-bottom: 12px; font-size: 18px; font-weight: 600;">Generated Text:</h3>
+            <pre id="outputText" style="background: #0a0a0a; color: #e5e5e5; padding: 16px; border-radius: 6px; border: 1px solid #262626; white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.6;"></pre>
+            <button type="button" class="btn btn-primary" id="copyBtn" style="margin-top: 12px;">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        function formatDate(date) {
+            const day = date.getDate();
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            return `${day}${getOrdinal(day)} ${month} ${year}`;
+        }
+
+        function getOrdinal(n) {
+            const s = ['th', 'st', 'nd', 'rd'];
+            const v = n % 100;
+            return s[(v - 20) % 10] || s[v] || s[0];
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function setCurrentDate() {
+            document.getElementById('date').value = formatDate(new Date());
+        }
+
+        function getLastTimelineText() {
+            const entries = Array.from(document.querySelectorAll('.timeline-entry'));
+            if (entries.length === 0) return null;
+            const lastEntry = entries[entries.length - 1];
+            const timeText = lastEntry.querySelector('.timeline-time').value;
+            const parts = timeText.split(' ');
+            return parts.slice(1).join(' ');
+        }
+
+        function addTimelineEntry(text) {
+            const container = document.getElementById('timelineEntries');
+            const entry = document.createElement('div');
+            entry.className = 'timeline-entry';
+            const time = getCurrentTime();
+            entry.innerHTML = `
+                <div class="timeline-row">
+                    <input type="text" class="timeline-time" value="${time} ${text}" placeholder="Time" readonly>
+                    <button type="button" class="remove-btn" onclick="this.parentElement.parentElement.remove(); debouncedSave(); renderFlowButtons();">Remove</button>
+                </div>
+            `;
+            container.appendChild(entry);
+            renderFlowButtons();
+            debouncedSave();
+        }
+
+        function getCurrentQuestion() {
+            const entries = Array.from(document.querySelectorAll('.timeline-entry'));
+            for (let i = entries.length - 1; i >= 0; i--) {
+                const timeText = entries[i].querySelector('.timeline-time').value;
+                const text = timeText.split(' ').slice(1).join(' ').toLowerCase();
+                if (text.includes('question 1 given') || text.includes('q1 given')) return 1;
+                if (text.includes('question 2 given') || text.includes('q2 given')) return 2;
+            }
+            return null;
+        }
+
+        function hasQuestionBeenSolved(qNum) {
+            const entries = Array.from(document.querySelectorAll('.timeline-entry'));
+            for (let i = entries.length - 1; i >= 0; i--) {
+                const timeText = entries[i].querySelector('.timeline-time').value;
+                const text = timeText.split(' ').slice(1).join(' ').toLowerCase();
+                if (text.includes(`q${qNum} solved`)) return true;
+            }
+            return false;
+        }
+
+        function renderFlowButtons() {
+            const container = document.getElementById('flowButtons');
+            container.innerHTML = '';
+            
+            const lastText = getLastTimelineText();
+            const lowerText = lastText ? lastText.toLowerCase() : '';
+            const currentQ = getCurrentQuestion();
+            
+            let buttons = [];
+            
+            if (!lastText) {
+                buttons.push({ text: 'Candidate arrives and brief intro', primary: true });
+            } else if (lowerText.includes('candidate arrives') || lowerText.includes('brief intro')) {
+                buttons.push({ text: 'Interview started', primary: true });
+            } else if (lowerText.includes('interview started')) {
+                buttons.push({ text: 'Question 1 given', primary: true });
+            } else if (lowerText.includes('question 1 given') || lowerText.includes('q1 given')) {
+                if (!hasQuestionBeenSolved(1)) {
+                    buttons.push({ text: 'Q1 solved', primary: true });
+                    buttons.push({ text: 'Hint given', primary: false });
+                }
+            } else if (currentQ === 1 && !hasQuestionBeenSolved(1)) {
+                buttons.push({ text: 'Q1 solved', primary: true });
+                buttons.push({ text: 'Hint given', primary: false });
+            } else if (lowerText.includes('q1 solved')) {
+                buttons.push({ text: 'Question 2 given', primary: true });
+            } else if (lowerText.includes('question 2 given') || lowerText.includes('q2 given')) {
+                if (!hasQuestionBeenSolved(2)) {
+                    buttons.push({ text: 'Q2 solved', primary: true });
+                    buttons.push({ text: 'Hint given', primary: false });
+                }
+            } else if (currentQ === 2 && !hasQuestionBeenSolved(2)) {
+                buttons.push({ text: 'Q2 solved', primary: true });
+                buttons.push({ text: 'Hint given', primary: false });
+            } else if (lowerText.includes('q2 solved')) {
+                buttons.push({ text: 'Interview ended', primary: true });
+            }
+            
+            if (buttons.length === 0) {
+                container.innerHTML = '<span style="color: #a3a3a3; font-size: 14px;">Timeline complete</span>';
+                return;
+            }
+            
+            buttons.forEach((btn, index) => {
+                if (index > 0) {
+                    const separator = document.createElement('span');
+                    separator.className = 'flow-separator';
+                    separator.textContent = '|';
+                    container.appendChild(separator);
+                }
+                
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = btn.primary ? 'flow-btn' : 'flow-btn flow-btn-secondary';
+                button.textContent = btn.text;
+                button.onclick = () => addTimelineEntry(btn.text);
+                container.appendChild(button);
+            });
+        }
+
+        function saveInterviewerName() {
+            const name = document.getElementById('interviewerName').value.trim();
+            if (name) {
+                localStorage.setItem('interviewerName', name);
+            }
+        }
+
+        function loadInterviewerName() {
+            const saved = localStorage.getItem('interviewerName');
+            if (saved) {
+                document.getElementById('interviewerName').value = saved;
+            }
+        }
+
+        function saveToSessionStorage() {
+            const formData = {
+                candidateName: document.getElementById('candidateName').value,
+                interviewerName: document.getElementById('interviewerName').value,
+                date: document.getElementById('date').value,
+                verdict: document.getElementById('verdict').value,
+                algo: document.getElementById('algo').value,
+                code: document.getElementById('code').value,
+                communication: document.getElementById('communication').value,
+                total: document.getElementById('total').value,
+                note: document.getElementById('note').value,
+                timelineNotes: document.getElementById('timelineNotes').value,
+                timeline: Array.from(document.querySelectorAll('.timeline-entry')).map(entry => {
+                    const timeText = entry.querySelector('.timeline-time').value;
+                    const parts = timeText.split(' ');
+                    return {
+                        time: parts[0] || '',
+                        text: parts.slice(1).join(' ') || ''
+                    };
+                })
+            };
+            sessionStorage.setItem('interviewFormData', JSON.stringify(formData));
+        }
+
+        function loadFromSessionStorage() {
+            const saved = sessionStorage.getItem('interviewFormData');
+            if (!saved) {
+                return;
+            }
+            const formData = JSON.parse(saved);
+            document.getElementById('candidateName').value = formData.candidateName || '';
+            document.getElementById('interviewerName').value = formData.interviewerName || '';
+            document.getElementById('date').value = formData.date || formatDate(new Date());
+            document.getElementById('verdict').value = formData.verdict || '';
+            document.getElementById('algo').value = formData.algo || '0';
+            document.getElementById('code').value = formData.code || '0';
+            document.getElementById('communication').value = formData.communication || '0';
+            document.getElementById('total').value = formData.total || '0';
+            document.getElementById('note').value = formData.note || '';
+            document.getElementById('timelineNotes').value = formData.timelineNotes || '';
+            
+            updateSliderValues();
+            
+            const timelineContainer = document.getElementById('timelineEntries');
+            timelineContainer.innerHTML = '';
+            if (formData.timeline) {
+                formData.timeline.forEach(item => {
+                    const entry = document.createElement('div');
+                    entry.className = 'timeline-entry';
+                    entry.innerHTML = `
+                        <div class="timeline-row">
+                            <input type="text" class="timeline-time" value="${item.time + " "+ item.text}" placeholder="Time" readonly>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.parentElement.remove(); debouncedSave(); renderFlowButtons();">Remove</button>
+                        </div>
+                    `;
+                    timelineContainer.appendChild(entry);
+                });
+            }
+        }
+
+        function updateSliderValues() {
+            document.getElementById('algoValue').textContent = document.getElementById('algo').value;
+            document.getElementById('codeValue').textContent = document.getElementById('code').value;
+            document.getElementById('communicationValue').textContent = document.getElementById('communication').value;
+            document.getElementById('totalValue').textContent = document.getElementById('total').value;
+        }
+
+        function generateText() {
+            const candidateName = document.getElementById('candidateName').value;
+            const interviewerName = document.getElementById('interviewerName').value;
+            const date = document.getElementById('date').value;
+            const verdict = document.getElementById('verdict').value;
+            const algo = document.getElementById('algo').value;
+            const code = document.getElementById('code').value;
+            const communication = document.getElementById('communication').value;
+            const total = document.getElementById('total').value;
+            const note = document.getElementById('note').value;
+            
+            const timelineEntries = Array.from(document.querySelectorAll('.timeline-entry'))
+                .map(entry => {
+                    const timeText = entry.querySelector('.timeline-time').value;
+                    return timeText || null;
+                })
+                .filter(entry => entry !== null);
+
+            const timelineNotes = document.getElementById('timelineNotes').value.trim();
+
+            let text = `Candidate Name: ${candidateName}
+Interviewer Name: ${interviewerName}
+Date: ${date}
+
+Verdict: ${verdict}
+
+Algo: ${algo}/5
+Code: ${code}/5
+Communication: ${communication}/3
+Total: ${total}/5
+
+Note: ${note}
+
+
+Timeline
+${timelineEntries.join('\n')}${timelineNotes ? '\n\n' + timelineNotes : ''}`;
+
+            document.getElementById('outputText').textContent = text;
+            document.getElementById('output').style.display = 'block';
+            window.generatedText = text;
+        }
+
+        function copyText() {
+            const text = window.generatedText || document.getElementById('outputText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#22c55e';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy text');
+            });
+        }
+
+        function clearAll() {
+            if (confirm('Are you sure you want to clear all data and start a new form?')) {
+                const interviewerName = document.getElementById('interviewerName').value;
+                document.getElementById('interviewForm').reset();
+                document.getElementById('interviewerName').value = interviewerName;
+                setCurrentDate();
+                document.getElementById('timelineEntries').innerHTML = '';
+                document.getElementById('timelineNotes').value = '';
+                sessionStorage.removeItem('interviewFormData');
+                document.getElementById('output').style.display = 'none';
+                updateSliderValues();
+                renderFlowButtons();
+            }
+        }
+
+        let saveTimer;
+        function debouncedSave() {
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(saveToSessionStorage, 5000);
+        }
+
+        const timelineContainer = document.getElementById('timelineEntries');
+        const timelineObserver = new MutationObserver(() => {
+            renderFlowButtons();
+        });
+        if (timelineContainer) {
+            timelineObserver.observe(timelineContainer, { childList: true, subtree: true });
+        }
+
+        document.getElementById('algo').addEventListener('input', (e) => {
+            document.getElementById('algoValue').textContent = e.target.value;
+            debouncedSave();
+        });
+        document.getElementById('code').addEventListener('input', (e) => {
+            document.getElementById('codeValue').textContent = e.target.value;
+            debouncedSave();
+        });
+        document.getElementById('communication').addEventListener('input', (e) => {
+            document.getElementById('communicationValue').textContent = e.target.value;
+            debouncedSave();
+        });
+        document.getElementById('total').addEventListener('input', (e) => {
+            document.getElementById('totalValue').textContent = e.target.value;
+            debouncedSave();
+        });
+
+        document.getElementById('candidateName').addEventListener('input', debouncedSave);
+        document.getElementById('interviewerName').addEventListener('input', () => {
+            saveInterviewerName();
+            debouncedSave();
+        });
+        document.getElementById('verdict').addEventListener('change', debouncedSave);
+        document.getElementById('note').addEventListener('input', debouncedSave);
+        document.getElementById('timelineNotes').addEventListener('input', debouncedSave);
+
+        document.getElementById('generateBtn').addEventListener('click', generateText);
+        document.getElementById('copyBtn').addEventListener('click', copyText);
+        document.getElementById('clearBtn').addEventListener('click', clearAll);
+
+        setCurrentDate();
+        loadInterviewerName();
+        loadFromSessionStorage();
+        renderFlowButtons();
+    </script>
+</body>
+</html>
